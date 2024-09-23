@@ -10,12 +10,11 @@ public class Player : MonoBehaviour
     public Transform bombsTransform;
 
     public Vector3 velocity = new Vector3(0.01f, 0);
-    public Vector3 height = new Vector3(0, 0.01f);
+    public float moveSpeed = 0.1f;
 
     void Update()
     {
         //Simplifying our previous statement. The player's position is getting assigned and added to by the velocity vector which is declared as a variable beforehand. 
-        
         playerMovement();
     }
 
@@ -23,20 +22,22 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W)) //Up
         {
-            transform.position += height;
+            velocity += Vector3.up;
         }
         if (Input.GetKey(KeyCode.A)) //Left
         {
-            transform.position -= velocity;
+            velocity += Vector3.left;
         }
         if (Input.GetKey(KeyCode.S)) //Down
         {
-            transform.position -= height;
+            velocity += Vector3.down;
         }
         if (Input.GetKey(KeyCode.D)) //Right
         {
-            transform.position += velocity;
+            velocity += Vector3.right; 
         }
+
+        transform.position += moveSpeed * Time.deltaTime * velocity;
     }
 
 }
