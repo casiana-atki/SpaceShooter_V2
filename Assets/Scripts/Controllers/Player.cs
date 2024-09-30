@@ -9,17 +9,24 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public Transform bombsTransform;
 
+    //Task 1A Variables
     public Vector3 velocity = new Vector3(0.01f, 0);
     public float moveSpeed = 0.1f;
+    //Task 1B Variables
     public float maxSpeed = 5.0f;
     public float accelerationTime = 0.5f;
     public float acceleration; 
     private Vector3 currentVelocity = Vector3.zero;
+    //Task 1C Variables
+    public float decelerationTime = 1.0f; 
+    public float deceleration;
 
     private void Start()
     {
         //Task 1B - calculating acceleration
         acceleration = maxSpeed / accelerationTime; 
+        //Task 1C - calculating deceleration
+        deceleration = maxSpeed / decelerationTime;
     }
 
     void Update()
@@ -30,22 +37,27 @@ public class Player : MonoBehaviour
 
     private void playerMovement()
     {
+        bool isInputActive = false;
         //Task 1A - Velocity
         if (Input.GetKey(KeyCode.W)) //Up
         {
             velocity += Vector3.up;
+            isInputActive = true;
         }
         if (Input.GetKey(KeyCode.A)) //Left
         {
             velocity += Vector3.left;
+            isInputActive = true;
         }
         if (Input.GetKey(KeyCode.S)) //Down
         {
             velocity += Vector3.down;
+            isInputActive = true;
         }
         if (Input.GetKey(KeyCode.D)) //Right
         {
-            velocity += Vector3.right; 
+            velocity += Vector3.right;
+            isInputActive = true;
         }
 
         //Task 1B - Acceleration
@@ -54,13 +66,16 @@ public class Player : MonoBehaviour
             velocity.Normalize(); 
         }
 
-        if (velocity != Vector3.zero)
+        if (isInputActive == true)
         {
             currentVelocity += velocity * acceleration * Time.deltaTime;
         }
         else
-        {
-            currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, 0.1f); 
+        {   //Adjustments made for Task 1C - Deceleration
+            //if (isInputActive == false)
+            //{
+                currentVelocity -= currentVelocity.normalized * deceleration * Time.deltaTime;
+            //}
         }
 
         if (currentVelocity.magnitude > maxSpeed)
@@ -68,8 +83,14 @@ public class Player : MonoBehaviour
             currentVelocity = currentVelocity.normalized * maxSpeed; 
         }
 
+        //For Task 1C - Deceleration
+       /* if (currentVelocity.magnitude < 0.1f)
+        {
+            currentVelocity = Vector3.zero; 
+        }*/
+
         transform.position += currentVelocity * Time.deltaTime;
-        //Debug.Log("Current Velocity: " + currentVelocity.magnitude);
+        Debug.Log("Current Velocity: " + currentVelocity.magnitude);
     }
 
 }
