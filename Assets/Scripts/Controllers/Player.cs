@@ -71,23 +71,14 @@ public class Player : MonoBehaviour
             currentVelocity += velocity * acceleration * Time.deltaTime;
         }
         else
-        {   //Adjustments made for Task 1C - Deceleration
-            //if (isInputActive == false)
-            //{
+        {   
                 currentVelocity -= currentVelocity.normalized * deceleration * Time.deltaTime;
-            //}
         }
 
         if (currentVelocity.magnitude > maxSpeed)
         {
             currentVelocity = currentVelocity.normalized * maxSpeed; 
         }
-
-        //For Task 1C - Deceleration
-       /* if (currentVelocity.magnitude < 0.1f)
-        {
-            currentVelocity = Vector3.zero; 
-        }*/
 
         transform.position += currentVelocity * Time.deltaTime;
         Debug.Log("Current Velocity: " + currentVelocity.magnitude);
