@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
         }
 
         transform.position += currentVelocity * Time.deltaTime;
-        Debug.Log("Current Velocity: " + currentVelocity.magnitude);
+        //Debug.Log("Current Velocity: " + currentVelocity.magnitude);
     }
 
 }
