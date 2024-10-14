@@ -5,16 +5,25 @@ using UnityEngine;
 public class Moon : MonoBehaviour
 {
     public Transform planetTransform;
+    private float angle; 
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        angle = 0f; 
     }
 
-    // Update is called once per frame
     void Update()
     {
+        OrbitalMotion(5f, 1f * Time.deltaTime, planetTransform); 
+    }
 
+    public void OrbitalMotion(float radius, float speed, Transform target)
+    {
+        angle += speed;
+
+        float x = target.position.x + Mathf.Cos(angle) * radius;
+        float y = target.position.y + Mathf.Sin(angle) * radius; 
+
+        transform.position = new Vector3(x, y, transform.position.z);
     }
 }
