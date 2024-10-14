@@ -9,36 +9,51 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public Transform bombsTransform;
 
-    //Task 1A Variables
+    //J3: Task 1A Variables
     public Vector3 velocity = new Vector3(0.01f, 0);
     public float moveSpeed = 0.1f;
-    //Task 1B Variables
+    //J3: Task 1B Variables
     public float maxSpeed = 5.0f;
     public float accelerationTime = 0.5f;
     public float acceleration; 
     private Vector3 currentVelocity = Vector3.zero;
-    //Task 1C Variables
+    //J3: Task 1C Variables
     public float decelerationTime = 1.0f; 
     public float deceleration;
+    //J4: Task 1 Variables
+    public float radius = 2.0f;
+    int circlePoints = 8;
+
+    LineRenderer lineRenderer; 
 
     private void Start()
     {
-        //Task 1B - calculating acceleration
-        acceleration = maxSpeed / accelerationTime; 
-        //Task 1C - calculating deceleration
+        //J3: Task 1B - calculating acceleration
+        acceleration = maxSpeed / accelerationTime;
+        //J3: Task 1C - calculating deceleration
         deceleration = maxSpeed / decelerationTime;
+
+
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.positionCount = circlePoints + 1;
+        lineRenderer.startWidth = 0.05f;
+        lineRenderer.endWidth = 0.05f;
+
+        lineRenderer.startColor = Color.green;
+        lineRenderer.endColor = Color.green; 
     }
 
     void Update()
     {
-        //Simplifying our previous statement. The player's position is getting assigned and added to by the velocity vector which is declared as a variable beforehand. 
+        //J3: Simplifying our previous statement. The player's position is getting assigned and added to by the velocity vector which is declared as a variable beforehand. 
         playerMovement();
+        EnemyRadar(radius, circlePoints); 
     }
 
     private void playerMovement()
     {
         bool isInputActive = false;
-        //Task 1A - Velocity
+        //J3: Task 1A - Velocity
         if (Input.GetKey(KeyCode.W)) //Up
         {
             velocity += Vector3.up;
@@ -60,7 +75,7 @@ public class Player : MonoBehaviour
             isInputActive = true;
         }
 
-        //Task 1B - Acceleration
+        //J3: Task 1B - Acceleration
         if (velocity.magnitude > 1)
         {
             velocity.Normalize(); 
@@ -84,4 +99,24 @@ public class Player : MonoBehaviour
         //Debug.Log("Current Velocity: " + currentVelocity.magnitude);
     }
 
+    //J4: Task 1
+    public void EnemyRadar (float radius, int circlePoints)
+    {
+        bool enemyWithinRadius = Vector3.Distance(transform.position, enemyTransform.position) <= radius; 
+        Color circleColor = enemyWithinRadius ? Color.red : Color.green;
+        lineRenderer.startColor = circleColor;
+        lineRenderer.endColor = circleColor;
+        DrawCircle(transform.position, radius, circlePoints); 
+    }
+
+    private void DrawCircle(Vector3 position, float radius, int points)
+    {
+
+        for (int i = 0; i <= points; i++)
+        {
+            float angle = i * Mathf.PI * 2 / points;
+            Vector3 point = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
+            lineRenderer.SetPosition(i, position + point); 
+        }
+    }
 }
