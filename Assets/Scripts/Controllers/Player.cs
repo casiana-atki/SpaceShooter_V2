@@ -20,9 +20,13 @@ public class Player : MonoBehaviour
     //J3: Task 1C Variables
     public float decelerationTime = 1.0f; 
     public float deceleration;
+
+
     //J4: Task 1 Variables
     public float radius = 2.0f;
     int circlePoints = 8;
+    //J4: Task 2 Variables
+    public GameObject powerupPrefab; 
 
     LineRenderer lineRenderer; 
 
@@ -40,7 +44,9 @@ public class Player : MonoBehaviour
         lineRenderer.endWidth = 0.05f;
 
         lineRenderer.startColor = Color.green;
-        lineRenderer.endColor = Color.green; 
+        lineRenderer.endColor = Color.green;
+
+        SpawnPowerups(radius, 5); 
     }
 
     void Update()
@@ -117,6 +123,18 @@ public class Player : MonoBehaviour
             float angle = i * Mathf.PI * 2 / points;
             Vector3 point = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
             lineRenderer.SetPosition(i, position + point); 
+        }
+    }
+
+    //J4: Task 2 
+    public void SpawnPowerups(float radius, int numberOfPowerups)
+    {
+        for (int i = 0; i < numberOfPowerups; i++)
+        {
+            float angle = i * (360f / numberOfPowerups);
+            float randomRadius = Random.Range(radius * 0.8f, radius);
+            Vector3 spawnPosition = new Vector3(transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad) * randomRadius, transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad) * randomRadius, transform.position.z);
+            Instantiate(powerupPrefab, spawnPosition, Quaternion.identity); 
         }
     }
 }
