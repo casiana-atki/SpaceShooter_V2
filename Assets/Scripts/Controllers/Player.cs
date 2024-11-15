@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     //J3: Task 1C Variables
     public float decelerationTime = 1.0f; 
     public float deceleration;
+    //Assignment 1 Task 3 Variables
+    public GameObject homingMissilePrefab; 
+    public Transform missileSpawnPoint;  
 
 
     //J4: Task 1 Variables
@@ -59,6 +62,12 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             SpawnBombGrid(transform.position, 1.0f);
+        }
+
+        //Assignment 1 Task 3
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FireHomingMissile();
         }
     }
 
@@ -144,7 +153,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    //Assignment 1 Task 1
+    //Assignment 1 - Task 1 - 3x3 Bomb
     public void SpawnBombGrid(Vector3 centerPosition, float spacing)
     {
         GameObject[] existingBombs = GameObject.FindGameObjectsWithTag("Bomb");
@@ -162,5 +171,13 @@ public class Player : MonoBehaviour
                 Instantiate(bombPrefab, bombPosition, Quaternion.identity);
             }
         }
+    }
+
+    //Assignment 1 - Task 3 - Homing Missile 
+    private void FireHomingMissile()
+    {
+        GameObject missile = Instantiate(homingMissilePrefab, missileSpawnPoint.position, Quaternion.identity);
+        HomingMissile missileScript = missile.GetComponent<HomingMissile>();
+        missileScript.enemyTransform = enemyTransform;  
     }
 }
