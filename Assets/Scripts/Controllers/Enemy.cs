@@ -10,21 +10,24 @@ public class Enemy : MonoBehaviour
     private Vector3 currentVelocity = Vector3.zero;
     private float acceleration;
     private float deceleration;
+    private bool isRetreating = false;
 
     private void Start()
     {
         acceleration = maxSpeed / accelerationTime;
         deceleration = maxSpeed / decelerationTime;
+
+        StartCoroutine(RetreatAndReturn());
     }
 
     private void Update()
     {
-        MoveTowardsPlayer();
+        MoveTowardsPlayer(isRetreating ? -1 : 1);
     }
 
-    private void MoveTowardsPlayer()
+    private void MoveTowardsPlayer(int directionMultiplier)
     {
-        Vector3 direction = playerTransform.position - transform.position;
+        Vector3 direction = (playerTransform.position - transform.position) * directionMultiplier;
         float distance = direction.magnitude;
 
         if (distance > 0.1f) 
@@ -43,5 +46,17 @@ public class Enemy : MonoBehaviour
         }
 
         transform.position += currentVelocity * Time.deltaTime;
+    }
+
+    private IEnumerator RetreatAndReturn()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(6.0f);
+            isRetreating = true;
+
+            yield return new WaitForSeconds(2.0f);
+            isRetreating = false;
+        }
     }
 }
