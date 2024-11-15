@@ -53,7 +53,13 @@ public class Player : MonoBehaviour
     {
         //J3: Simplifying our previous statement. The player's position is getting assigned and added to by the velocity vector which is declared as a variable beforehand. 
         playerMovement();
-        EnemyRadar(radius, circlePoints); 
+        EnemyRadar(radius, circlePoints);
+
+        //Assignment 1 Task 1
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            SpawnBombGrid(transform.position, 1.0f);
+        }
     }
 
     private void playerMovement()
@@ -135,6 +141,26 @@ public class Player : MonoBehaviour
             float randomRadius = Random.Range(radius * 0.8f, radius);
             Vector3 spawnPosition = new Vector3(transform.position.x + Mathf.Cos(angle * Mathf.Deg2Rad) * randomRadius, transform.position.y + Mathf.Sin(angle * Mathf.Deg2Rad) * randomRadius, transform.position.z);
             Instantiate(powerupPrefab, spawnPosition, Quaternion.identity); 
+        }
+    }
+
+    //Assignment 1 Task 1
+    public void SpawnBombGrid(Vector3 centerPosition, float spacing)
+    {
+        GameObject[] existingBombs = GameObject.FindGameObjectsWithTag("Bomb");
+        foreach (GameObject bomb in existingBombs)
+        {
+            Destroy(bomb);
+        }
+
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                Vector3 offset = new Vector3(i * spacing, j * spacing, 0); 
+                Vector3 bombPosition = new Vector3(centerPosition.x + offset.x, centerPosition.y + offset.y, centerPosition.z);
+                Instantiate(bombPrefab, bombPosition, Quaternion.identity);
+            }
         }
     }
 }
