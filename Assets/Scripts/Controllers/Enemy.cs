@@ -17,11 +17,13 @@ public class Enemy : MonoBehaviour
         acceleration = maxSpeed / accelerationTime;
         deceleration = maxSpeed / decelerationTime;
 
+        //Assignment 1 - Task 2
         StartCoroutine(RetreatAndReturn());
     }
 
     private void Update()
     {
+        //Added a parameter for whether or not the boolean is true (Assignment 1 Task 2)
         MoveTowardsPlayer(isRetreating ? -1 : 1);
     }
 
@@ -48,6 +50,7 @@ public class Enemy : MonoBehaviour
         transform.position += currentVelocity * Time.deltaTime;
     }
 
+    //Coroutine for Assignment 1 Task 2
     private IEnumerator RetreatAndReturn()
     {
         while (true)
